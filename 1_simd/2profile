@@ -1,0 +1,34 @@
+#!/bin/bash
+
+. ../env.sh
+
+set -x
+
+dir=profile.$(date +%Y%m%d%H%M%S)
+mkdir -p $dir
+cp lj.cpp Makefile profiler.hpp $dir/.
+cd $dir
+make -B
+root=$(pwd)
+EXE="../lj -N 1372 -e 1000 -s 1000"
+
+mkdir aps
+cd aps
+aps --start-paused --result-dir=./aps_result -- $EXE &> aps.log
+aps --report -H aps.html ./aps_result &> aps_report.log
+
+cd $root
+mkdir advisor
+cd advisor
+advi_dir=./advi_results
+ADVISOR="advisor --collect=roofline --project-dir=$advi_dir -- " # -knob sampling-interval=1"
+$ADVISOR $EXE &> advi_roofline.log
+advisor --report=roofline --project-dir=$advi_dir --report-output=./advi_roofline.html
+
+cd $root
+mkdir vtune
+cd vtune
+VTUNE="vtune --start-paused" # -knob sampling-interval=1"
+$VTUNE -collect hotspots          $EXE &> hotspots.log
+$VTUNE -collect hpc-performance   $EXE &> hpc-performance.log
+$VTUNE -collect uarch-exploration $EXE &> uarch-exploration.log
