@@ -1,0 +1,18 @@
+#!/bin/bash
+
+. ../env.sh
+
+set -x
+export OMP_TARGET_OFFLOAD=mandatory
+#export LIBOMPTARGET_DEBUG=1
+export LIBOMPTARGET_PLUGIN=level_zero
+
+export SYCL_DEVICE_SELECTOR=level_zero:gpu
+
+dir=run.$(date +%Y%m%d%H%M%S)
+mkdir $dir
+cp lj.cpp Makefile profiler.hpp $dir/.
+cd $dir
+make -B test=1
+./lj -N $NUM_PARTICLE -e 1000 -s 1000 &> log
+cat log
