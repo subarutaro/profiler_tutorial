@@ -10,7 +10,7 @@ cp lj.cpp Makefile profiler.hpp $dir/.
 cd $dir
 make -B
 root=$(pwd)
-EXE="../lj -N 1372 -e 1000 -s 1000"
+EXE="../lj -N $NUM_PARTICLE -e 1000 -s 1000"
 
 mkdir aps
 cd aps
@@ -21,9 +21,13 @@ cd $root
 mkdir advisor
 cd advisor
 advi_dir=./advi_results
-ADVISOR="advisor --collect=roofline --project-dir=$advi_dir -- " # -knob sampling-interval=1"
-$ADVISOR $EXE &> advi_roofline.log
+#ADVISOR="advisor --collect=roofline --enable-cache-simulation --project-dir=$advi_dir -- "
+#$ADVISOR $EXE &> advi_roofline.log
+advisor --collect=survey                                             --project-dir=$advi_dir -- $EXE &> advi_survery.log
+advisor --collect=tripcounts -flop -stacks --enable-cache-simulation --project-dir=$advi_dir -- $EXE &> advi_tripcounts.log
+advisor --collect=offload                                            --project-dir=$advi_dir -- $EXE &> advi_survery.log
 advisor --report=roofline --project-dir=$advi_dir --report-output=./advi_roofline.html
+advisor --report=offload  --project-dir=$advi_dir --report-output=./advi_offload.html
 
 cd $root
 mkdir vtune

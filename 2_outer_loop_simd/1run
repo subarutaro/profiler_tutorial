@@ -9,5 +9,5 @@ mkdir $dir
 cp lj.cpp Makefile profiler.hpp $dir/.
 cd $dir
 make -B test=1
-./lj -N 1372 -e 1000 -s 1000 &> log
+./lj -N $NUM_PARTICLE -e 1000 -s 1000 &> log
 cat log
