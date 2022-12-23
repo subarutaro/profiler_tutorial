@@ -139,6 +139,7 @@ void calc_force(const int nmol, const double length, Atom* atom){
   const double c8  = 24.0;
   const double lh  = 0.5 * length;
   const double eps = 1e-32;
+#pragma omp parallel for
   for(int i=0;i<nmol;i++){
     const Vec3 posi = atom[i].pos;
     Vec3 fi = Vec3(0.0,0.0,0.0);
