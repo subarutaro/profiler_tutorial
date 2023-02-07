@@ -17,19 +17,11 @@ EXE="../lj -N $NUM_PARTICLE -e 1000 -s 1000"
 
 mkdir aps
 cd aps
-#aps --start-paused --result-dir=./aps_result -- $EXE &> aps.log
-#aps --report -H aps.html ./aps_result &> aps_report.log
-
-cd $root
-mkdir advisor
-cd advisor
-advi_dir=./advi_results
-ADVISOR="advisor --project-dir=$advi_dir" # -knob sampling-interval=1"
-#$ADVISOR --collect=roofline --profile-gpu                        -- $EXE &> advi_roofline.log
-#$ADVISOR --collect=projection --profile-gpu --model-baseline-gpu -- $EXE &> advi_projection.log
+aps --start-paused --result-dir=./aps_result -- $EXE &> aps.log
+aps --report -H aps.html ./aps_result &> aps_report.log
 
 cd $root
 mkdir vtune
 cd vtune
-VTUNE="vtune --start-paused -knob sampling-mode=hw"
+VTUNE="vtune --start-paused"
 $VTUNE -collect gpu-hotspots          $EXE &> gpu-hotspots.log
