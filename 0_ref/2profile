@@ -17,6 +17,8 @@ cd aps
 aps --start-paused --result-dir=./aps_result -- $EXE &> aps.log
 aps --report -H aps.html ./aps_result &> aps_report.log
 
+exit
+
 cd $root
 mkdir advisor
 cd advisor
