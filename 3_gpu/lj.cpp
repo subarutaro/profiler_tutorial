@@ -170,20 +170,13 @@ void calc_force(const int nmol, const FP length, sycl::queue& queue){
       const Vec3 posj = atom[j].pos;
       Vec3 dr = posi - posj;
 #ifdef PBC
-#if 1
       if(dr.x <= -lh) dr.x += length;
       if(dr.x >   lh) dr.x -= length;
       if(dr.y <= -lh) dr.y += length;
       if(dr.y >   lh) dr.y -= length;
       if(dr.z <= -lh) dr.z += length;
       if(dr.z >   lh) dr.z -= length;
-#else
-      dr.x -= ((int)(dr.x*lh_inv))*length;
-      dr.y -= ((int)(dr.y*lh_inv))*length;
-      dr.z -= ((int)(dr.z*lh_inv))*length;
 #endif
-#endif
-      //const FP r2 = eps + sum(dr*dr);
       const FP r2 = eps + dr.x*dr.x + dr.y*dr.y + dr.z*dr.z;
 #ifdef CUTOFF
       if(r2 <= rcut2){
@@ -285,7 +278,7 @@ int main(int argc, char** argv){
   const FP dth = 0.5 * dt;
   fprintf(stderr,"System size: [0.0,%lf), [0.0,%lf), [0.0,%lf)\n",length,length,length);
 
-  auto queue = sycl::queue(sycl::default_selector());
+  auto queue = sycl::queue();
   atom_ = sycl::malloc_shared<Atom>(sizeof(Atom)*nmol,queue);
 
   auto atom = atom_;

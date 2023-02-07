@@ -154,7 +154,7 @@ void calc_force(const int nmol, const double length, Atom* atom){
       if(dr.z <= -lh) dr.z += length;
       if(dr.z >   lh) dr.z -= length;
 #endif
-      const double r2 = eps + sum(dr*dr);
+      const double r2 = eps + dr.x*dr.x + dr.y*dr.y + dr.z*dr.z;
 #ifdef CUTOFF
       if(r2 <= rcut2){
 #endif
@@ -189,7 +189,7 @@ double calc_potential_energy(const int nmol, const double length, Atom* atom){
       if(dr.z <= -lh) dr.z += length;
       if(dr.z >   lh) dr.z -= length;
 #endif
-      const double r2 = sum(dr*dr);
+      const double r2 = dr.x*dr.x + dr.y*dr.y + dr.z*dr.z;
 #ifdef CUTOFF
       if(r2 <= rcut2){
 #endif
