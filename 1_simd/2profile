@@ -27,10 +27,12 @@ advisor --collect=survey                                             --project-d
 advisor --collect=tripcounts -flop -stacks --enable-cache-simulation --project-dir=$advi_dir -- $EXE &> advi_tripcounts.log
 advisor --report=roofline --project-dir=$advi_dir --report-output=./advi_roofline.html
 
+exit 
+
 cd $root
 mkdir vtune
 cd vtune
-VTUNE="vtune --start-paused" # -knob sampling-interval=1"
+VTUNE="vtune --start-paused"
 $VTUNE -collect hotspots          $EXE &> hotspots.log
 $VTUNE -collect hpc-performance   $EXE &> hpc-performance.log
 $VTUNE -collect uarch-exploration $EXE &> uarch-exploration.log
