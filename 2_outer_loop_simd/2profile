@@ -27,7 +27,6 @@ advisor --collect=survey                                             --project-d
 advisor --collect=tripcounts -flop -stacks --enable-cache-simulation --project-dir=$advi_dir -- $EXE &> advi_tripcounts.log
 advisor --collect=offload                                            --project-dir=$advi_dir -- $EXE &> advi_survery.log
 advisor --report=roofline --project-dir=$advi_dir --report-output=./advi_roofline.html
-advisor --report=offload  --project-dir=$advi_dir --report-output=./advi_offload.html
 
 exit
 
